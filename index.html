@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>OMEGA.AI — Your Intelligent AI Assistant</title>
+  <meta
+    name="description"
+    content="OMEGA.AI is your next-generation AI assistant for ideas, writing, coding and creativity."
+  />
+
+  <style>
+    /* =========================
+       RESET
+    ========================== */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background: #05060a;
+      color: #ffffff;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    /* =========================
+       BACKGROUND
+    ========================== */
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(120, 70, 255, 0.16), transparent 30%),
+        radial-gradient(circle at 80% 30%, rgba(0, 210, 255, 0.12), transparent 30%),
+        radial-gradient(circle at 50% 90%, rgba(150, 0, 255, 0.10), transparent 35%),
+        #05060a;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      opacity: 0.22;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+
+    /* =========================
+       NAVBAR
+    ========================== */
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 76px;
+      z-index: 1000;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 7%;
+
+      background: rgba(5, 6, 10, 0.72);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .logo-icon {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+
+      border-radius: 10px;
+
+      background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+      box-shadow: 0 0 25px rgba(100, 100, 255, 0.4);
+
+      font-weight: 900;
+    }
+
+    .logo span {
+      background: linear-gradient(90deg, #fff, #a78bfa, #22d3ee);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: #a8adbd;
+      font-size: 14px;
+      transition: 0.25s;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .nav-button {
+      padding: 11px 18px;
+      border-radius: 10px;
+
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+
+      color: white !important;
+    }
+
+    .menu-button {
+      display: none;
+      background: transparent;
+      border: 0;
+      color: white;
+      font-size: 25px;
+      cursor: pointer;
+    }
+
+    /* =========================
+       HERO
+    ========================== */
+
+    .hero {
+      min-height: 100vh;
+      padding: 150px 7% 80px;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      text-align: center;
+      position: relative;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      padding: 8px 14px;
+      margin-bottom: 28px;
+
+      border: 1px solid rgba(167,139,250,0.3);
+      border-radius: 100px;
+
+      background: rgba(139,92,246,0.08);
+      color: #c4b5fd;
+
+      font-size: 13px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background: #22c55e;
+      border-radius: 50%;
+      box-shadow: 0 0 12px #22c55e;
+    }
+
+    .hero h1 {
+      max-width: 950px;
+
+      font-size: clamp(50px, 8vw, 105px);
+      line-height: 0.98;
+      letter-spacing: -5px;
+      font-weight: 900;
+    }
+
+    .gradient-text {
+      background: linear-gradient(
+        90deg,
+        #ffffff,
+        #a78bfa,
+        #22d3ee,
+        #ffffff
+      );
+
+      background-size: 250% auto;
+
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+
+      animation: gradientMove 5s linear infinite;
+    }
+
+    @keyframes gradientMove {
+      to {
+        background-position: 250% center;
+      }
+    }
+
+    .hero-description {
+      max-width: 650px;
+      margin: 28px auto;
+
+      color: #9da3b5;
+      font-size: 18px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .primary-button,
+    .secondary-button {
+      padding: 14px 23px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .primary-button {
+      color: white;
+      background: linear-gradient(135deg, #7c3aed, #0891b2);
+      box-shadow: 0 10px 35px rgba(124,58,237,0.25);
+    }
+
+    .primary-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 45px rgba(124,58,237,0.4);
+    }
+
+    .secondary-button {
+      color: #d1d5db;
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.1);
+    }
+
+    .secondary-button:hover {
+      background: rgba(255,255,255,0.09);
+    }
+
+    /* =========================
+       AI ORB
+    ========================== */
+
+    .orb-container {
+      margin-top: 75px;
+      position: relative;
+      width: 220px;
+      height: 220px;
+      display: grid;
+      place-items: center;
+    }
+
+    .orb {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+
+      background:
+        radial-gradient(circle at 35% 30%, #fff, #8b5cf6 20%, #06b6d4 55%, #111827 75%);
+
+      box-shadow:
+        0 0 30px #8b5cf6,
+        0 0 90px rgba(34,211,238,0.45);
+
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .orb-ring {
+      position: absolute;
+      border: 1px solid rgba(167,139,250,0.3);
+      border-radius: 50%;
+      animation: spin 10s linear infinite;
+    }
+
+    .ring-one {
+      width: 190px;
+      height: 80px;
+      transform: rotate(25deg);
+    }
+
+    .ring-two {
+      width: 80px;
+      height: 190px;
+      transform: rotate(-25deg);
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(385deg);
+      }
+    }
+
+    @keyframes float {
+      50% {
+        transform: translateY(-12px);
+      }
+    }
+
+    /* =========================
+       SECTION
+    ========================== */
+
+    section {
+      padding: 100px 7%;
+    }
+
+    .section-heading {
+      text-align: center;
+      max-width: 700px;
+      margin: auto auto 55px;
+    }
+
+    .section-heading .small-title {
+      color: #8b5cf6;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(32px, 5vw, 55px);
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+
+    .section-heading p {
+      color: #8f96a8;
+    }
+
+    /* =========================
+       TOOLS
+    ========================== */
+
+    .tools-grid {
+      max-width: 1100px;
+      margin: auto;
+
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .tool-card {
+      padding: 25px;
+
+      min-height: 210px;
+
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.08);
+
+      background: rgba(255,255,255,0.035);
+
+      transition: 0.35s;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-7px);
+      border-color: rgba(139,92,246,0.45);
+      background: rgba(139,92,246,0.07);
+    }
+
+    .tool-icon {
+      width: 48px;
+      height: 48px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 13px;
+
+      background: rgba(139,92,246,0.12);
+
+      font-size: 23px;
+      margin-bottom: 20px;
+    }
+
+    .tool-card h3 {
+      margin-bottom: 8px;
+    }
+
+    .tool-card p {
+      color: #8d94a5;
+      font-size: 14px;
+    }
+
+    /* =========================
+       CHAT
+    ========================== */
+
+    .chat-section {
+      padding-top: 50px;
+    }
+
+    .chat-box {
+      max-width: 850px;
+      margin: auto;
+
+      overflow: hidden;
+
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 22px;
+
+      background: rgba(10,11,18,0.85);
+      box-shadow: 0 30px 100px rgba(0,0,0,0.3);
+    }
+
+    .chat-header {
+      padding: 18px 22px;
+
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .chat-avatar {
+      width: 38px;
+      height: 38px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 11px;
+
+      background: linear-gradient(135deg,#7c3aed,#0891b2);
+    }
+
+    .chat-name {
+      font-weight: 700;
+    }
+
+    .online {
+      color: #22c55e;
+      font-size: 11px;
+    }
+
+    .chat-messages {
+      height: 360px;
+      padding: 25px;
+      overflow-y: auto;
+    }
+
+    .message {
+      max-width: 75%;
+      padding: 13px 16px;
+      margin-bottom: 14px;
+
+      border-radius: 15px;
+
+      font-size: 14px;
+    }
+
+    .bot-message {
+      background: rgba(255,255,255,0.06);
+      color: #dce0ea;
+    }
+
+    .user-message {
+      margin-left: auto;
+      background: linear-gradient(135deg,#6d28d9,#0e7490);
+      color: white;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 10px;
+      padding: 15px;
+
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .chat-input input {
+      flex: 1;
+
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+
+      padding: 13px 15px;
+
+      outline: none;
+
+      background: rgba(255,255,255,0.04);
+      color: white;
+    }
+
+    .chat-input input:focus {
+      border-color: #8b5cf6;
+    }
+
+    .send-button {
+      width: 48px;
+      border: 0;
+      border-radius: 12px;
+
+      color: white;
+      background: linear-gradient(135deg,#7c3aed,#0891b2);
+
+      cursor: pointer;
+    }
+
+    /* =========================
+       FEATURES
+    ========================== */
+
+    .features {
+      max-width: 1100px;
+      margin: auto;
+
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .feature {
+      padding: 28px;
+
+      border-radius: 18px;
+
+      background: linear-gradient(
+        145deg,
+        rgba(255,255,255,0.055),
+        rgba(255,255,255,0.018)
+      );
+
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .feature-number {
+      color: #8b5cf6;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .feature h3 {
+      margin: 15px 0 8px;
+    }
+
+    .feature p {
+      color: #858c9d;
+      font-size: 14px;
+    }
+
+    /* =========================
+       CTA
+    ========================== */
+
+    .cta {
+      text-align: center;
+    }
+
+    .cta-box {
+      max-width: 950px;
+      margin: auto;
+
+      padding: 70px 30px;
+
+      border-radius: 28px;
+
+      border: 1px solid rgba(139,92,246,0.2);
+
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(124,58,237,0.18),
+          transparent 60%
+        ),
+        rgba(255,255,255,0.025);
+    }
+
+    .cta h2 {
+      font-size: clamp(35px, 5vw, 60px);
+      line-height: 1.05;
+      margin-bottom: 18px;
+    }
+
+    .cta p {
+      color: #969dad;
+      margin-bottom: 25px;
+    }
+
+    /* =========================
+       FOOTER
+    ========================== */
+
+    footer {
+      padding: 45px 7%;
+      border-top: 1px solid rgba(255,255,255,0.07);
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      color: #707789;
+      font-size: 13px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+    /* =========================
+       MOBILE
+    ========================== */
+
+    @media (max-width: 900px) {
+
+      .tools-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        position: absolute;
+        top: 76px;
+        left: 0;
+        width: 100%;
+
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+
+        padding: 25px 7%;
+
+        background: rgba(5,6,10,0.96);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .menu-button {
+        display: block;
+      }
+    }
+
+    @media (max-width: 600px) {
+
+      .navbar {
+        padding: 0 5%;
+      }
+
+      section {
+        padding: 75px 5%;
+      }
+
+      .hero {
+        padding-left: 5%;
+        padding-right: 5%;
+      }
+
+      .hero h1 {
+        letter-spacing: -3px;
+      }
+
+      .hero-description {
+        font-size: 16px;
+      }
+
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .chat-messages {
+        height: 300px;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 18px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       NAVBAR
+  ========================== -->
+
+  <header class="navbar">
+
+    <a href="#home" class="logo">
+      <div class="logo-icon">Ω</div>
+      <span>OMEGA.AI</span>
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#tools">AI Tools</a>
+      <a href="#chat">Chat</a>
+      <a href="#features">Features</a>
+      <a href="#about">About</a>
+
+      <a href="#chat" class="nav-button">
+        Try OMEGA
+      </a>
+    </nav>
+
+    <button class="menu-button" id="menuButton">
+      ☰
+    </button>
+
+  </header>
+
+
+  <!-- =========================
+       HERO
+  ========================== -->
+
+  <main>
+
+    <section class="hero" id="home">
+
+      <div class="badge">
+        <span class="status-dot"></span>
+        OMEGA AI is online
+      </div>
+
+      <h1>
+        Meet the future of
+        <span class="gradient-text">AI.</span>
+      </h1>
+
+      <p class="hero-description">
+        OMEGA.AI helps you think, create, write, code and explore ideas
+        faster with one intelligent AI workspace.
+      </p>
+
+      <div class="hero-buttons">
+
+        <a href="#chat" class="primary-button">
+          Start Chatting →
+        </a>
+
+        <a href="#tools" class="secondary-button">
+          Explore AI Tools
+        </a>
+
+      </div>
+
+      <div class="orb-container">
+
+        <div class="orb-ring ring-one"></div>
+        <div class="orb-ring ring-two"></div>
+
+        <div class="orb"></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         AI TOOLS
+    ========================== -->
+
+    <section id="tools">
+
+      <div class="section-heading">
+
+        <div class="small-title">
+          OMEGA Intelligence
+        </div>
+
+        <h2>
+          One AI. Endless possibilities.
+        </h2>
+
+        <p>
+          Powerful tools designed to help you turn ideas into results.
+        </p>
+
+      </div>
+
+
+      <div class="tools-grid">
+
+        <article class="tool-card">
+
+          <div class="tool-icon">✦</div>
+
+          <h3>AI Writer</h3>
+
+          <p>
+            Create articles, captions, scripts, emails and creative ideas
+            in seconds.
+          </p>
+
+        </article>
+
+
+        <article class="tool-card">
+
+          <div class="tool-icon">⌘</div>
+
+          <h3>AI Coder</h3>
+
+          <p>
+            Generate, explain and improve code with your intelligent
+            coding assistant.
+          </p>
+
+        </article>
+
+
+        <article class="tool-card">
+
+          <div class="tool-icon">◉</div>
+
+          <h3>AI Vision</h3>
+
+          <p>
+            Analyze images, understand visual information and extract
+            useful insights.
+          </p>
+
+        </article>
+
+
+        <article class="tool-card">
+
+          <div class="tool-icon">✧</div>
+
+          <h3>AI Creative</h3>
+
+          <p>
+            Brainstorm stories, concepts, campaigns and creative projects
+            with OMEGA.
+          </p>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         CHAT
+    ========================== -->
+
+    <section class="chat-section" id="chat">
+
+      <div class="section-heading">
+
+        <div class="small-title">
+          OMEGA CHAT
+        </div>
+
+        <h2>
+          Ask OMEGA anything.
+        </h2>
+
+        <p>
+          This demo interface is ready to connect to your AI API.
+        </p>
+
+      </div>
+
+
+      <div class="chat-box">
+
+        <div class="chat-header">
+
+          <div class="chat-avatar">
+            Ω
+          </div>
+
+          <div>
+            <div class="chat-name">
+              OMEGA
+            </div>
+
+            <div class="online">
+              ● Online
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="chat-messages" id="chatMessages">
+
+          <div class="message bot-message">
+            Hello! I'm OMEGA.AI 👋
+            How can I help you today?
+          </div>
+
+        </div>
+
+
+        <form class="chat-input" id="chatForm">
+
+          <input
+            id="chatInput"
+            type="text"
+            placeholder="Ask OMEGA anything..."
+            autocomplete="off"
+          />
+
+          <button class="send-button" type="submit">
+            ↑
+          </button>
+
+        </form>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         FEATURES
+    ========================== -->
+
+    <section id="features">
+
+      <div class="section-heading">
+
+        <div class="small-title">
+          Why OMEGA
+        </div>
+
+        <h2>
+          Built for the next generation.
+        </h2>
+
+        <p>
+          A clean, fast and intelligent AI experience.
+        </p>
+
+      </div>
+
+
+      <div class="features">
+
+        <article class="feature">
+
+          <div class="feature-number">
+            01 — INTELLIGENT
+          </div>
+
+          <h3>
+            Think with AI
+          </h3>
+
+          <p>
+            Use OMEGA as your brainstorming partner for ideas, research,
+            planning and problem solving.
+          </p>
+
+        </article>
+
+
+        <article class="feature">
+
+          <div class="feature-number">
+            02 — CREATIVE
+          </div>
+
+          <h3>
+            Create without limits
+          </h3>
+
+          <p>
+            Turn simple thoughts into stories, scripts, designs,
+            concepts and content.
+          </p>
+
+        </article>
+
+
+        <article class="feature">
+
+          <div class="feature-number">
+            03 — SIMPLE
+          </div>
+
+          <h3>
+            One simple workspace
+          </h3>
+
+          <p>
+            Everything you need in one beautiful AI interface designed
+            for desktop and mobile.
+          </p>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         ABOUT
+    ========================== -->
+
+    <section id="about">
+
+      <div class="section-heading">
+
+        <div class="small-title">
+          ABOUT OMEGA
+        </div>
+
+        <h2>
+          Intelligence, redesigned.
+        </h2>
+
+        <p>
+          OMEGA.AI is designed as a futuristic AI platform where
+          creativity and technology come together.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         CTA
+    ========================== -->
+
+    <section class="cta">
+
+      <div class="cta-box">
+
+        <h2>
+          Ready to meet OMEGA?
+        </h2>
+
+        <p>
+          Start exploring the future of AI today.
+        </p>
+
+        <a href="#chat" class="primary-button">
+          Launch OMEGA →
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+
+  <footer>
+
+    <div>
+      © 2026 OMEGA.AI. All rights reserved.
+    </div>
+
+    <div class="footer-links">
+      <a href="#about">About</a>
+      <a href="#features">Features</a>
+      <a href="#chat">Chat</a>
+    </div>
+
+  </footer>
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================== -->
+
+  <script>
+
+    /* =========================
+       MOBILE MENU
+    ========================== */
+
+    const menuButton = document.getElementById("menuButton");
+    const navLinks = document.getElementById("navLinks");
+
+    menuButton.addEventListener("click", () => {
+      navLinks.classList.toggle("active");
+
+      menuButton.textContent =
+        navLinks.classList.contains("active")
+          ? "✕"
+          : "☰";
+    });
+
+
+    /* Close mobile menu after clicking a link */
+
+    document.querySelectorAll(".nav-links a").forEach(link => {
+
+      link.addEventListener("click", () => {
+
+        navLinks.classList.remove("active");
+
+        menuButton.textContent = "☰";
+
+      });
+
+    });
+
+
+    /* =========================
+       DEMO AI CHAT
+    ========================== */
+
+    const chatForm = document.getElementById("chatForm");
+    const chatInput = document.getElementById("chatInput");
+    const chatMessages = document.getElementById("chatMessages");
+
+
+    function addMessage(text, type) {
+
+      const message = document.createElement("div");
+
+      message.className =
+        `message ${type === "user"
+          ? "user-message"
+          : "bot-message"}`;
+
+      message.textContent = text;
+
+      chatMessages.appendChild(message);
+
+      chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+    }
+
+
+    function getDemoResponse(text) {
+
+      const message = text.toLowerCase();
+
+      if (message.includes("hello") ||
+          message.includes("hi")) {
+
+        return "Hello! 👋 I'm OMEGA. What would you like to create today?";
+      }
+
+      if (message.includes("website")) {
+
+        return "Absolutely. I can help you plan the structure, design and code for your website.";
+      }
+
+      if (message.includes("code")) {
+
+        return "Let's build it. Tell me what you want the code to do and I'll help you create it.";
+      }
+
+      if (message.includes("who are you")) {
+
+        return "I'm OMEGA.AI — your intelligent digital assistant.";
+      }
+
+      if (message.includes("idea")) {
+
+        return "Great! Give me a topic and I'll generate creative ideas for you.";
+      }
+
+      return "Interesting! I'm currently running in demo mode. Connect an AI API to make OMEGA fully intelligent.";
+    }
+
+
+    chatForm.addEventListener("submit", (event) => {
+
+      event.preventDefault();
+
+      const text = chatInput.value.trim();
+
+      if (!text) return;
+
+      addMessage(text, "user");
+
+      chatInput.value = "";
+
+      /* Thinking delay */
+
+      setTimeout(() => {
+
+        const response =
+          getDemoResponse(text);
+
+        addMessage(response, "bot");
+
+      }, 700);
+
+    });
+
+
+    /* =========================
+       ENTER KEY
+    ========================== */
+
+    chatInput.addEventListener("keydown", (event) => {
+
+      if (event.key === "Enter") {
+
+        event.preventDefault();
+
+        chatForm.requestSubmit();
+
+      }
+
+    });
+
+
+    /* =========================
+       REVEAL ANIMATION
+    ========================== */
+
+    const cards =
+      document.querySelectorAll(
+        ".tool-card, .feature, .cta-box"
+      );
+
+    const observer =
+      new IntersectionObserver(
+        entries => {
+
+          entries.forEach(entry => {
+
+            if (entry.isIntersecting) {
+
+              entry.target.style.opacity = "1";
+              entry.target.style.transform =
+                "translateY(0)";
+
+            }
+
+          });
+
+        },
+        {
+          threshold: 0.12
+        }
+      );
+
+
+    cards.forEach(card => {
+
+      card.style.opacity = "0";
+      card.style.transform = "translateY(25px)";
+      card.style.transition =
+        "opacity .7s ease, transform .7s ease";
+
+      observer.observe(card);
+
+    });
+
+  </script>
+
+</body>
+  </html>
